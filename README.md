@@ -50,10 +50,21 @@ By completing this lab, you will master:
 
 ## 🛠️ Technology Stack
 
+### Primary Engine (Real-Time Games)
 - **Language**: GDScript (Python-like, beginner-friendly)
 - **Engine**: Godot (free, open-source, powerful)
-- **Version Control**: Git
 - **Editor**: Godot Script Editor
+- **Use For**: 1D, 2D, 3D, arcade, platformer, action, puzzle games
+
+### Secondary Engine (Narrative Games)
+- **Language**: Ren'Py Script / Python
+- **Engine**: Ren'Py (free, open-source, story-focused)
+- **Editor**: Any text editor or Ren'Py's built-in script editor
+- **Use For**: Visual novels, interactive fiction, story-driven adventure/RPG
+
+### Shared Tools
+- **Version Control**: Git
+- **Project Management**: PROGRESS.md
 
 ## 📚 Learning Stages
 
@@ -97,6 +108,13 @@ By completing this lab, you will master:
 15. **Mini Racing Game** - Vehicle physics, checkpoints, lap counting
 16. **Mini Adventure Game** - Interaction, inventory, quests, dialogue
 
+### Bonus Track: Ren'Py Visual Novels (Narrative & Story)
+**Focus**: Story-driven games, branching choices, character systems
+- **VN1: Branching Story** - Choices and consequences
+- **VN2: Character Expressions** - Character systems and emotions
+- **VN3: Inventory Quest VN** - Variables, state, quests, save/load
+- **VN4: Your Own Visual Novel** - Capstone or side project
+
 ### Capstone Project
 **Your own original game** combining learned systems
 
@@ -125,6 +143,12 @@ GameDevLab/
 │   ├── Game14-Maze-Explorer/
 │   ├── Game15-Mini-Racing/
 │   └── Game16-Mini-Adventure/
+├── Stage4-3D-Games/            # 3D development
+├── RenPy-Projects/             # Visual novels & narrative games
+│   ├── VN01-Branching-Story/
+│   ├── VN02-Character-Expressions/
+│   ├── VN03-Inventory-Quest/
+│   └── VN04-RenPy-Capstone/
 ├── Capstone/                   # Your original game
 └── Resources/                  # Shared assets and theory
     ├── Theory/                 # Concept explanations

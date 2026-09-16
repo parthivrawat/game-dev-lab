@@ -14,10 +14,11 @@ This is a comprehensive, structured learning environment designed to take you fr
 
 ## 📊 Project Statistics
 
-- **Total Games**: 16 complete games + 1 capstone project
-- **Learning Stages**: 5 (Foundations + 4 game stages)
+- **Total Games**: 16 Godot games + 4 Ren'Py visual novels + 1 capstone
+- **Learning Stages**: 5 (Foundations + 4 game stages) + Bonus Ren'Py track
 - **Estimated Duration**: 6-12 months at 1-3 hours/week
-- **Technology**: Godot 4.x with GDScript
+- **Primary Technology**: Godot 4.x with GDScript
+- **Bonus Technology**: Ren'Py for visual novels and narrative games
 - **Approach**: Theory-first, hands-on, incremental complexity
 
 ---
@@ -29,7 +30,7 @@ GameDevLab/
 ├── 📄 README.md                    # Main project overview
 ├── 📄 GETTING-STARTED.md           # Step-by-step start guide
 ├── 📄 PROGRESS.md                  # Learning progress tracker
-├── 📄 QUICK-REFERENCE.md           # Godot & GDScript cheat sheet
+├── 📄 QUICK-REFERENCE.md           # Godot, GDScript & Ren'Py cheat sheet
 ├── 📄 PROJECT-SUMMARY.md           # This file
 ├── 📄 .gitignore                   # Git ignore rules
 │
@@ -60,13 +61,20 @@ GameDevLab/
 │   ├── Game15-Mini-Racing/
 │   └── Game16-Mini-Adventure/
 │
+├── 📁 RenPy-Projects/             # Visual novels & narrative games
+│   ├── VN01-Branching-Story/
+│   ├── VN02-Character-Expressions/
+│   ├── VN03-Inventory-Quest/
+│   └── VN04-RenPy-Capstone/
+│
 ├── 📁 Capstone/                   # Your original game
 │   └── (Design your own game)
 │
 └── 📁 Resources/                  # Shared resources
     ├── Theory/                    # Concept explanations
     │   ├── 00-Setup-Guide.md
-    │   └── 01-What-Is-A-Game.md
+    │   ├── 01-What-Is-A-Game.md
+    │   └── 02-What-Is-RenPy.md
     ├── Assets/                    # Reusable graphics/sounds
     ├── Templates/                 # Code templates
     └── References/                # Documentation links
@@ -138,11 +146,22 @@ GameDevLab/
 
 ---
 
+### Bonus Track: Ren'Py Visual Novels (4 VNs)
+**Goal**: Learn narrative game design and interactive fiction
+
+| VN | Difficulty | Key Concepts |
+|------|-----------|--------------|
+| **Branching Story** | Beginner | Visual novels, choices, consequences, labels |
+| **Character Expressions** | Beginner | Character definitions, images, emotions |
+| **Inventory Quest VN** | Intermediate | Variables, state, inventory, save/load |
+| **Your Own VN** | Intermediate | Story design, branching, polish |
+
 ### Capstone Project
 **Goal**: Create your own original game
 
 - Design your own game concept
 - Combine learned systems
+- Choose Godot or Ren'Py (or both!)
 - Full development cycle
 - Polish and complete
 
@@ -152,10 +171,13 @@ GameDevLab/
 
 | Component | Technology | Why? |
 |-----------|-----------|------|
-| **Game Engine** | Godot 4.x | Free, beginner-friendly, powerful |
-| **Language** | GDScript | Python-like, easy to learn |
+| **Primary Game Engine** | Godot 4.x | Free, beginner-friendly, powerful 2D/3D |
+| **Primary Language** | GDScript | Python-like, easy to learn |
+| **Narrative Engine** | Ren'Py | Best for visual novels and story games |
+| **Narrative Language** | Ren'Py Script / Python | Simple, story-focused syntax |
 | **Version Control** | Git | Industry standard, track progress |
-| **Editor** | Godot Script Editor | Integrated, no setup needed |
+| **Primary Editor** | Godot Script Editor | Integrated, no setup needed |
+| **Narrative Editor** | Any text editor + Ren'Py Launcher | Ren'Py uses script files |
 | **Platform** | Windows | Your current OS |
 
 ---
@@ -172,6 +194,7 @@ GameDevLab/
 ### Theory Documents
 1. **00-Setup-Guide.md** - Install Godot, understand game engines
 2. **01-What-Is-A-Game.md** - Game loops, core components, fundamentals
+3. **02-What-Is-RenPy.md** - Visual novels, Ren'Py basics, engine comparison
 
 ### Future Documents (Created as needed)
 - Programming fundamentals lessons

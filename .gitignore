@@ -9,6 +9,16 @@ mono_crash.*.json
 # Godot 4+ specific
 .godot/
 
+# Ren'Py-specific ignores
+*.rpyc          # Compiled Ren'Py scripts
+*.rpyb          # Ren'Py bytecode
+*.save          # Ren'Py save files
+saves/          # Ren'Py save directory
+cache/          # Ren'Py cache
+log.txt         # Ren'Py log
+errors.txt      # Ren'Py errors
+traceback.txt   # Ren'Py traceback
+
 # General
 *.swp
 *.swo

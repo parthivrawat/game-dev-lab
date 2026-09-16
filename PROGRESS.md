@@ -3,8 +3,9 @@
 **Student Profile**
 - Programming Experience: Advanced
 - Weekly Time Commitment: 1-3 hours
-- Interests: Adventure/RPG, Puzzle games, Action/Arcade, 3D games
+- Interests: Adventure/RPG, Puzzle games, Action/Arcade, 3D games, Visual Novels
 - Start Date: 2026-09-15
+- Engines: Godot (primary), Ren'Py (bonus narrative track)
 
 ---
 
@@ -12,7 +13,8 @@
 
 **Current Stage**: Stage 0 - Foundations  
 **Current Lesson**: Not started  
-**Games Completed**: 0 / 16  
+**Godot Games Completed**: 0 / 16  
+**Ren'Py VNs Completed**: 0 / 4  
 **Overall Progress**: 0%
 
 ---
@@ -33,6 +35,8 @@
 - [ ] Coordinate systems (1D)
 - [ ] Game states
 - [ ] Input handling basics
+- [ ] What is a visual novel?
+- [ ] What is Ren'Py?
 
 **Deliverable**: Simple text-based interactive program
 
@@ -146,6 +150,32 @@
 
 ---
 
+### Bonus: Ren'Py Narrative Track
+**Status**: Optional  
+**Completion**: 0 / 4 visual novels
+
+#### VN 1: Branching Story
+- **Status**: Not Started
+- **Concepts**: Visual novels, choices, branching, labels
+- **Skill Level**: Not yet attempted
+
+#### VN 2: Character Expressions
+- **Status**: Not Started
+- **Concepts**: Character definitions, images, emotions
+- **Skill Level**: Not yet attempted
+
+#### VN 3: Inventory Quest VN
+- **Status**: Not Started
+- **Concepts**: Variables, inventory, quests, save/load
+- **Skill Level**: Not yet attempted
+
+#### VN 4: Your Own Visual Novel
+- **Status**: Not Started
+- **Concepts**: Story design, branching, polish
+- **Skill Level**: Not yet attempted
+
+---
+
 ### Capstone Project
 **Status**: Not Started  
 **Game Concept**: TBD
@@ -217,6 +247,20 @@
 | UI Controls | ❌ | |
 | Resources | ❌ | |
 
+### Ren'Py-Specific
+| Concept | Level | Notes |
+|---------|-------|-------|
+| Visual Novel Structure | ❌ | |
+| Ren'Py Syntax | ❌ | |
+| Labels & Flow | ❌ | |
+| Characters & Dialogue | ❌ | |
+| Images & Sprites | ❌ | |
+| Menus & Choices | ❌ | |
+| Variables in Ren'Py | ❌ | |
+| Save/Load | ❌ | |
+| GUI & Screens | ❌ | |
+| Distribution | ❌ | |
+
 ---
 
 ## 🐛 Bugs Solved
@@ -260,6 +304,8 @@
 - [ ] Completed first 3D game
 - [ ] Understood 3D coordinate system
 - [ ] Completed all 3D games
+- [ ] Installed Ren'Py
+- [ ] Completed first visual novel
 - [ ] Started capstone project
 - [ ] Completed capstone project
 

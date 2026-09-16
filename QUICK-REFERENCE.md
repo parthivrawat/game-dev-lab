@@ -37,6 +37,13 @@
 - [ ] Implement and polish
 - [ ] Complete!
 
+### Bonus: Ren'Py Visual Novels
+- [ ] Install Ren'Py
+- [ ] VN 1: Branching Story
+- [ ] VN 2: Character Expressions
+- [ ] VN 3: Inventory Quest VN
+- [ ] VN 4: Your Own Visual Novel
+
 ---
 
 ## 🎮 Godot Quick Reference
@@ -376,6 +383,146 @@ Before considering a game complete:
 - Camera perspective
 - 3D physics
 - Spatial reasoning
+
+### Bonus: Ren'Py Narrative Track
+- Visual novel structure
+- Branching choices
+- Character systems
+- Save/load for text games
+
+---
+
+## 📖 Ren'Py Quick Reference
+
+### Basic Script Structure
+
+```renpy
+# Define characters
+define e = Character("Eileen", color="#c8ffc8")
+define m = Character("Me", color="#c8c8ff")
+
+# Start of game
+label start:
+    scene bg room
+    show eileen happy
+    
+    e "Hello! This is a visual novel."
+    
+    menu:
+        "What do you do?"
+        
+        "Say hello."
+            e "Nice to meet you!"
+            $ friendship += 1
+        
+        "Stay silent."
+            e "You don't talk much, do you?"
+    
+    return
+```
+
+### Common Ren'Py Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `label name:` | Named section | `label start:` |
+| `scene image` | Show background | `scene bg room` |
+| `show image` | Show character/sprite | `show eileen happy` |
+| `hide image` | Hide character/sprite | `hide eileen` |
+| `character "text"` | Dialogue | `e "Hello!"` |
+| `"narration"` | Narration text | `"It was dark."` |
+| `menu:` | Player choices | See example above |
+| `$ var = value` | Python expression | `$ score += 10` |
+| `if condition:` | Conditional | `if friendship > 5:` |
+| `jump label` | Go to label | `jump chapter2` |
+| `call label` | Go and return | `call help_menu` |
+| `return` | End of section | `return` |
+| `with dissolve` | Fade transition | `scene bg room with dissolve` |
+
+### Character Definition
+
+```renpy
+define e = Character("Eileen", color="#c8ffc8")
+define m = Character("You", color="#c8c8ff")
+define narrator = Character(None)
+```
+
+### Variables in Ren'Py
+
+```renpy
+# In init block or during game
+$ score = 0
+$ player_name = "Hero"
+$ has_key = false
+
+# Using variables
+"You have [score] points."
+e "Hello, [player_name]!"
+```
+
+### Branching Choices
+
+```renpy
+menu:
+    "Where do you want to go?"
+    "Forest":
+        jump forest_scene
+    "Castle":
+        jump castle_scene
+    "Stay here." (if has_map):
+        "You decide to wait."
+```
+
+### Conditional Story
+
+```renpy
+if has_key:
+    "You unlock the door."
+    jump inside
+else:
+    "The door is locked."
+```
+
+### Image Paths
+
+```
+project/
+├── game/
+│   ├── script.rpy
+│   ├── images/
+│   │   ├── bg room.png
+│   │   ├── eileen happy.png
+│   │   └── eileen sad.png
+```
+
+Use in script:
+```renpy
+scene bg room
+show eileen happy
+show eileen sad with dissolve
+```
+
+### Common Ren'Py File Structure
+
+```
+MyVN/
+├── game/
+│   ├── script.rpy          # Main story
+│   ├── options.rpy         # Game settings
+│   ├── screens.rpy         # UI screens
+│   ├── gui.rpy             # GUI settings
+│   ├── images/             # Backgrounds and sprites
+│   ├── audio/              # Music and sounds
+│   └── saves/              # Save files
+├── MyVN.exe                # Launcher
+└── project.json
+```
+
+### Ren'Py Resources
+
+- **Official Tutorial**: https://www.renpy.org/doc/html/tutorial.html
+- **Ren'Py Cookbook**: https://lemmasoft.renai.us/forums/viewforum.php?f=51
+- **Official Site**: https://www.renpy.org/
 
 ---
 

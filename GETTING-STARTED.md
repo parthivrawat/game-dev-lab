@@ -48,6 +48,28 @@ This means we can move efficiently through fundamentals and focus on game-specif
 
 ---
 
+### Optional Step 1b: Install Ren'Py (15 minutes)
+
+Since you're interested in **Adventure/RPG** games with story, we also have a **Ren'Py bonus track** for visual novels and narrative games.
+
+1. **Read the Ren'Py guide**:
+   - Open: `Resources/Theory/02-What-Is-RenPy.md`
+   - Learn what visual novels are and when to use Ren'Py
+
+2. **Download Ren'Py**:
+   - Visit: https://www.renpy.org/
+   - Download the latest version
+   - Extract to a convenient location
+
+3. **Create a test visual novel**:
+   - Launch the Ren'Py launcher
+   - Create a new project called `VN-Test-Project`
+   - Run the sample
+
+✅ **Checkpoint**: Can you create and run a simple Ren'Py visual novel?
+
+---
+
 ### Step 2: Understand Game Fundamentals (30-45 minutes)
 
 1. **Read the game loop theory**:
@@ -92,7 +114,7 @@ Your first game will be **Number Guessing Game**:
 ### Documentation
 - **README.md** - Full project overview and philosophy
 - **PROGRESS.md** - Track your learning journey
-- **QUICK-REFERENCE.md** - Godot and GDScript cheat sheet
+- **QUICK-REFERENCE.md** - Godot, GDScript, and Ren'Py cheat sheet
 - **Resources/Theory/** - Detailed concept explanations
 
 ### Project Structure
@@ -103,6 +125,7 @@ GameDevLab/
 ├── Stage2-2D-Games/            ← Then: Visual 2D games
 ├── Stage3-2D-Advanced/         ← Later: Complex systems
 ├── Stage4-3D-Games/            ← Finally: 3D development
+├── RenPy-Projects/             ← Bonus: Visual novels & story games
 ├── Capstone/                   ← Your own game!
 └── Resources/                  ← Theory and assets
 ```
