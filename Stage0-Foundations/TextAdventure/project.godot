@@ -1,0 +1,10 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all that obvious.
+
+config_version=5
+
+[application]
+
+config/name="DungeonCorridor"
+config/description="Stage 0 deliverable — a 1D text adventure demonstrating the game loop, input, 1D coordinates, and game states."
