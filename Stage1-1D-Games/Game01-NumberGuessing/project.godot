@@ -1,0 +1,10 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all that obvious.
+
+config_version=5
+
+[application]
+
+config/name="NumberGuessing"
+config/description="Stage 1, Game 1 — text-based number guessing game. Run headless: godot --headless --script main.gd"
