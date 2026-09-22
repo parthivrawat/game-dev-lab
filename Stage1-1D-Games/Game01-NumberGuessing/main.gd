@@ -96,9 +96,11 @@ func _validate_config() -> void:
 
 
 func _optimal_attempts() -> int:
-	# Binary search always wins within ceil(log2(range size)) guesses.
+	# Worst-case binary search depth is ceil(log2(span + 1)) — a 1-value
+	# range still needs 1 guess, and exact powers of two need one extra
+	# split (span 2 needs 2 guesses, span 4 needs 3).
 	var span := max_number - min_number + 1
-	return int(ceil(log(span) / log(2.0)))
+	return int(ceil(log(span + 1) / log(2.0)))
 
 
 func _detect_terminal() -> void:

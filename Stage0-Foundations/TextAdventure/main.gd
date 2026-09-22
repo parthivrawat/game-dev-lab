@@ -117,6 +117,7 @@ func _generate_map() -> void:
 	# living monster. Walk both directions from spawn and stop at the
 	# first monster each way — any cell in that zone is fair game.
 	var reachable := _reachable_cells()
+	reachable.erase(vault_pos)   # keep the vault free for its gold pile
 	sword_pos = reachable[randi_range(0, reachable.size() - 1)]
 
 	# Gold: a guaranteed pile at the vault end (if the cell is free),
@@ -405,6 +406,7 @@ func _print_outro() -> void:
 
 
 func _print_help() -> void:
-	_say("")
-	print("Commands: left/l, right/r, attack/a, look, status, quit/q")
-	print("Map: P=you  s=sword  g=gold  M=monster  E=exit  .=empty")
+	# Route through _say() so the text survives the next _render()'s
+	# screen clear — direct print() output would be wiped instantly.
+	_say("Commands: left/l, right/r, attack/a, look, status, quit/q\n"
+		+ "Map: P=you  s=sword  g=gold  M=monster  E=exit  .=empty")

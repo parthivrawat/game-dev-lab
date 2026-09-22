@@ -16,8 +16,10 @@ attempts) is tracked across rounds.
 
 ### Why 7 attempts?
 
-`7 = ceil(log2(100))`. If you guess the middle of the remaining range each
-time (50 → 75 → 88 → …), you **always** win. This is binary search — the first
+`7 = ceil(log2(101))` — the worst-case depth of the binary-search decision
+tree. (Strictly it's `ceil(log2(N+1))`: range 2 needs 2 guesses, range 4
+needs 3.) If you guess the middle of the remaining range each time
+(50 → 75 → 88 → …), you **always** win. This is binary search — the first
 algorithm that shows up in real game code (and interviews). Try it!
 
 ---
@@ -61,19 +63,18 @@ intro warns you the game is unwinnable — set `max_number = 1000` and
 
 ## ▶️ How to Run
 
-**Easiest**: double-click `run.bat` in this folder (it already points at
-`E:\Godot_v4.7.2-stable_win64_console.exe`).
+**Easiest**: double-click `run.bat` in this folder.
 
-Or from cmd/terminal:
+Or open a terminal in this folder and run:
 
 ```cmd
-cd E:\Games\Custom\GameDevLab\Stage1-1D-Games\Game01-NumberGuessing
-E:\Godot_v4.7.2-stable_win64_console.exe --headless --script main.gd
+godot --headless --script main.gd
 ```
 
 Use the **console** Godot build (`*_console.exe`) — the regular
 `Godot_v4.x_win64.exe` detaches from the console on Windows and can't do
-interactive stdin.
+interactive stdin. If `godot` isn't on PATH, either invoke the console exe
+by its full path, or set it in the `GODOT` variable at the top of `run.bat`.
 
 > ⚠️ **Do NOT run it from the Godot editor** (Script Editor → Run). The editor's
 > script runner only supports `@tool`/`EditorScript` utility scripts and will
