@@ -33,6 +33,10 @@ min_number = 1
 max_number = 100
 max_attempts = 7
 proximity_hints = true
+
+[ui]
+use_color = true
+clear_screen = true
 ```
 
 | Key | Type | Default | Effect |
@@ -41,6 +45,12 @@ proximity_hints = true
 | `max_number` | int | `100` | Highest possible secret |
 | `max_attempts` | int | `7` | Guesses per round (clamped to ≥ 1) |
 | `proximity_hints` | bool | `true` | Show "(very close!)/(close)" feedback |
+| `use_color` | bool | `true` | ANSI colors in output |
+| `clear_screen` | bool | `true` | Redraw a fixed HUD each turn |
+
+Color and screen-clearing are **automatically disabled** when output is piped
+or `NO_COLOR` is set — the game behaves like a proper CLI tool.
+(`FORCE_COLOR=1` overrides for testing.)
 
 **Validation is built in**: if `min_number > max_number` they're swapped;
 if `max_attempts` is below the binary-search optimum for your range, the
@@ -92,6 +102,7 @@ an attempt.
 | Random numbers | `_start_round` → `randi_range()` | One call, one line — Godot's global RNG |
 | Config files | `_load_config` → `ConfigFile` | Godot's INI handler — `get_value(section, key, default)`, `set_value`, `save`. The same class real games use for settings and saves |
 | Config validation | `_validate_config`, `_optimal_attempts` | Never trust a file the user can edit — swap reversed bounds, clamp attempts, warn on unwinnable configs |
+| Terminal UI | `_detect_terminal`, `_c`, `_tone`, `_clear_screen` | ANSI colors + clear-screen HUD, auto-disabled when piped or `NO_COLOR` is set — how real CLI tools behave |
 | Input validation | `_update_playing` | `is_valid_int()` + range check *before* the guess counts — bad input never costs an attempt |
 | Conditions | `higher/lower`, proximity hint | Layered `if`/`elif` — win check, attempts check, then graded feedback |
 | Loops | `while game_running` | The whole session is one loop; rounds restart via `_start_round()` |

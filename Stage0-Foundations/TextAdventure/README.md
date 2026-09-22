@@ -58,7 +58,8 @@ fight the goblin, escape.
 | Arrays (L1) | `_render` | Corridor built as an array of cell symbols |
 | Functions (L2) | Everywhere | Each phase/verb is its own small function |
 | Member vs local (L2) | `target` in `_try_move` | Local computed value vs. persistent member state |
-| 1D coordinates (L3) | `player_pos`, `_try_move`, `_describe_cell` | Direction `±1`, bounds check, `abs()` distance |
+| 1D coordinates (L3) | `player_pos`, `_try_move`, `_describe_cell` | Direction `±1`, bounds check, `absi()` distance |
+| Terminal UI | `_detect_terminal`, `_c`, `_tone`, `_clear_screen` | ANSI colors + clear-screen HUD; auto-disabled when piped or `NO_COLOR` is set |
 | Game states (L3) | `game_running` / `won` | Simple 2-state version; exercise D4 upgrades it |
 
 ---
