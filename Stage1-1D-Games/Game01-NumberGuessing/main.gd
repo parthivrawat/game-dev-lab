@@ -139,7 +139,7 @@ func _update_playing(input: String) -> void:
 		return
 	var hint := "Higher!" if guess < secret else "Lower!"
 	if proximity_hints:
-		var distance := abs(guess - secret)
+		var distance := absi(guess - secret)
 		if distance <= 5:
 			hint += " (very close!)"
 		elif distance <= 15:

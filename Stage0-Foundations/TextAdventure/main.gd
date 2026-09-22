@@ -135,7 +135,7 @@ func _fight_monster() -> void:
 
 
 func _describe_cell() -> void:
-	var distance := abs(MONSTER_POS - player_pos)
+	var distance := absi(MONSTER_POS - player_pos)
 	if player_pos == MONSTER_POS and not monster_alive:
 		last_message = "The goblin's corpse lies here. The exit is close."
 	elif monster_alive and distance == 1:
