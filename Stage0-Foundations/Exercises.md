@@ -238,11 +238,13 @@ func _parse_command(input: String) -> String:
 
 These have no single right answer — do them in `TextAdventure/main.gd`:
 
-- [ ] **D1 (easy)**: Add a `"potion"` at cell 5 that heals 10 HP when picked up.
+- [ ] **D1 (easy)**: Add a `"potion"` cell that heals 10 HP when picked up —
+  add it to the generator (and to `_free_cells` so it never overlaps).
 - [ ] **D2 (easy)**: Add a `"map"` command that re-renders the corridor
   (useful when output scrolls).
-- [ ] **D3 (medium)**: Make the monster chase the player — after each turn it
-  moves one cell toward the player. Now the game has stakes!
+- [ ] **D3 (medium)**: Make the monsters chase the player — after each turn,
+  each one moves one cell toward the player. Now the game has stakes! (And
+  think: does the reachable-sword rule still guarantee completable maps?)
 - [ ] **D4 (medium)**: Replace `won`/`game_running` with an
   `enum State { PLAYING, WON, LOST, QUIT }` and a `match` in the outro.
 - [ ] **D5 (harder)**: Add a second corridor level — after winning, the player
