@@ -8,7 +8,7 @@ your head.
 
 ## ▶️ How to Run
 
-Stdin doesn't work inside the Godot editor, so run it from a terminal:
+**Easiest**: double-click `run.bat` in this folder (or run it in a terminal).
 
 ```powershell
 cd E:\Games\Custom\GameDevLab\Stage0-Foundations\TextAdventure
@@ -17,6 +17,11 @@ godot --headless --script main.gd
 
 (Use the full path to your Godot executable if `godot` isn't on PATH, e.g.
 `"E:\Games\Godot\Godot_v4.x_win64.exe" --headless --script main.gd`)
+
+> ⚠️ **Do NOT run it from the Godot editor** (Script Editor → Run). The editor's
+> script runner only supports `@tool`/`EditorScript` utility scripts and will
+> fail with "doesn't extend EditorScript". Our game `extends SceneTree` — it's
+> the whole engine main loop — and needs a real terminal for stdin anyway.
 
 ## 🎮 How to Play
 

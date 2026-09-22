@@ -51,7 +51,7 @@ intro warns you the game is unwinnable — set `max_number = 1000` and
 
 ## ▶️ How to Run
 
-Stdin doesn't work inside the Godot editor, so run it from a terminal:
+**Easiest**: double-click `run.bat` in this folder (or run it in a terminal).
 
 ```powershell
 cd E:\Games\Custom\GameDevLab\Stage1-1D-Games\Game01-NumberGuessing
@@ -59,6 +59,11 @@ godot --headless --script main.gd
 ```
 
 (Use the full path to your Godot executable if `godot` isn't on PATH.)
+
+> ⚠️ **Do NOT run it from the Godot editor** (Script Editor → Run). The editor's
+> script runner only supports `@tool`/`EditorScript` utility scripts and will
+> fail with "doesn't extend EditorScript". Our game `extends SceneTree` — it's
+> the whole engine main loop — and needs a real terminal for stdin anyway.
 
 ## 🎮 Commands
 
