@@ -1,8 +1,22 @@
 # Dungeon Corridor — Stage 0 Deliverable
 
-A complete 1D text adventure in ~190 lines of GDScript. Every concept from
+A complete 1D text adventure in ~360 lines of GDScript. Every concept from
 Stage 0 lives in this file — the point is that you can hold the whole game in
 your head.
+
+**Each delve generates a random corridor** (10–16 cells) — and you spawn in
+the **middle**, not at an end:
+
+- The exit `E` is at a random end; the opposite end is a **gold vault**
+- 1–2 goblins `M` block paths — one always guards the exit route, and a
+  second sometimes guards the vault
+- The sword `s` always spawns in your **reachable zone** — cells you can walk
+  to without crossing a living monster
+
+Every map is **guaranteed completable** by construction: you can always reach
+the sword first, then every goblin is killable (2 HP each vs your 20 HP).
+After each delve you can play again on a fresh map — escapes are tracked per
+session.
 
 ---
 
@@ -29,9 +43,10 @@ interactive stdin.
 
 ## 🎮 How to Play
 
-You're at cell `0` of a 10-cell corridor. The exit `E` is at cell `9`, guarded
-by a goblin `M` at cell `8`. Find the `s`word, grab the `g`old on the way,
-fight the goblin, escape.
+You spawn mid-corridor. The exit `E` is at one end (check the map), gold
+piles wait at the other end and scattered about. Find the `s`word first —
+it's always somewhere you can reach without a fight — then slay the goblins
+`M` blocking your way and escape.
 
 | Command | Effect |
 |---------|--------|
@@ -53,7 +68,10 @@ fight the goblin, escape.
 |------------------|-------|----------------|
 | Game loop (Theory 01) | `_init` | Literal `input → update → render` in a `while` |
 | Game state | Top-of-file `var`s | The whole world is 8 variables |
-| Constants (L1) | `const` block | World layout as data — move the monster by editing one line |
+| Constants (L1) | `const` block | Rules as data — damage, health, corridor size range |
+| Random generation | `_generate_map` | Random exit end, mid-third spawn, gate + vault monsters |
+| Reachability | `_reachable_cells` | Walk both directions, stop at monsters — the completeness guarantee |
+| Constraint solving | `_free_cells` | Collecting valid cells before picking — the simplest "don't overlap" pattern |
 | Match (L1) | `_update` | Command parsing with aliases (`"left", "l"`) |
 | Arrays (L1) | `_render` | Corridor built as an array of cell symbols |
 | Functions (L2) | Everywhere | Each phase/verb is its own small function |
@@ -68,12 +86,14 @@ fight the goblin, escape.
 
 Do these in order — each one teaches something:
 
-1. **Move things around** — change `SWORD_POS`/`GOLD_POS`/`MONSTER_POS`.
-   Notice the world is *data*, not code.
-2. **Add a potion** at cell 5 that heals 10 HP (mirrors the gold pickup).
-3. **Add a `map` command** that re-renders (easy — good warm-up).
-4. **Make the monster chase you** — each turn it moves one cell toward the
-   player. You now have a real enemy and real tension.
+1. **Tweak the generator** — change `MIN_CORRIDOR`/`MAX_CORRIDOR` or
+   `VAULT_MONSTER_CHANCE` and play a few delves to feel the difference.
+2. **Add a potion** — a `p` cell that heals 10 HP (mirrors the gold pickup;
+   add it to `_free_cells` exclusion).
+3. **Three monsters** — allow a second gate monster. Does the sword rule
+   still guarantee completable maps? (Yes — why?)
+4. **Make monsters chase you** — each turn they move one cell toward the
+   player. Now generation constraints change — think about why.
 5. **Upgrade the state machine** — replace `won`/`game_running` with
    `enum State { PLAYING, WON, LOST, QUIT }`.
 
