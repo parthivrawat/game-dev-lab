@@ -28,6 +28,7 @@ var game_running := true
 var won := false
 var turns := 0
 var last_message := ""
+var _input_lines: Array = []    # queued lines when stdin delivers a chunk
 
 
 func _init() -> void:
@@ -52,12 +53,19 @@ func _init() -> void:
 
 func _read_input() -> String:
 	printraw("\n> ")
-	var line := OS.read_string_from_stdin().strip_edges().to_lower()
-	# On piped/redirected stdin an empty read means EOF — exit cleanly
-	# instead of spinning. (On a console, "" is just the Enter key.)
-	if line == "" and OS.get_stdin_type() != OS.STD_HANDLE_CONSOLE:
-		return "quit"
-	return line
+	if _input_lines.is_empty():
+		var chunk := OS.read_string_from_stdin()
+		if chunk == "":
+			# EOF on piped/redirected stdin -> quit instead of looping
+			# forever. On a console, "" is just the Enter key.
+			if OS.get_stdin_type() != OS.STD_HANDLE_CONSOLE:
+				return "quit"
+			return ""
+		# A single read may contain several lines when stdin is piped —
+		# split them so queued input isn't swallowed in one command.
+		_input_lines = chunk.split("\n")
+	var line: String = _input_lines.pop_front()
+	return line.strip_edges().to_lower()
 
 
 # --- UPDATE (game logic) ---------------------------------------------------

@@ -51,14 +51,19 @@ intro warns you the game is unwinnable — set `max_number = 1000` and
 
 ## ▶️ How to Run
 
-**Easiest**: double-click `run.bat` in this folder (or run it in a terminal).
+**Easiest**: double-click `run.bat` in this folder (it already points at
+`E:\Godot_v4.7.2-stable_win64_console.exe`).
 
-```powershell
+Or from cmd/terminal:
+
+```cmd
 cd E:\Games\Custom\GameDevLab\Stage1-1D-Games\Game01-NumberGuessing
-godot --headless --script main.gd
+E:\Godot_v4.7.2-stable_win64_console.exe --headless --script main.gd
 ```
 
-(Use the full path to your Godot executable if `godot` isn't on PATH.)
+Use the **console** Godot build (`*_console.exe`) — the regular
+`Godot_v4.x_win64.exe` detaches from the console on Windows and can't do
+interactive stdin.
 
 > ⚠️ **Do NOT run it from the Godot editor** (Script Editor → Run). The editor's
 > script runner only supports `@tool`/`EditorScript` utility scripts and will
