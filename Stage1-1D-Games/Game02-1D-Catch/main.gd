@@ -60,6 +60,9 @@ func _init() -> void:
 		_render()                           # 3. RENDER
 	if clear_screen:
 		_clear_screen()
+		if last_message != "":
+			# Re-show the final status line the clear just wiped.
+			print(_tone(last_message, last_tone))
 	_print_outro()
 	quit()
 
@@ -123,8 +126,10 @@ func _read_input() -> String:
 				return "quit"
 			return ""
 		# A single read may contain several lines when stdin is piped —
-		# split them so queued input isn't swallowed in one move.
-		_input_lines = chunk.split("\n")
+		# split them so queued input isn't swallowed in one move. Drop one
+		# trailing line ending first, or its empty tail becomes a phantom
+		# "wait" turn.
+		_input_lines = chunk.trim_suffix("\n").trim_suffix("\r").split("\n")
 	var line: String = _input_lines.pop_front()
 	return line.strip_edges().to_lower()
 
@@ -188,8 +193,17 @@ func _take_turn(direction: int) -> void:
 		_win_round("You land on the trapped firefly — caught!")
 		return
 
+	if absi(target_pos - player_pos) != 1:
+		# Free: drift one cell in its current direction, bouncing off the
+		# walls — it spends a tick sitting on the wall when it hits.
+		target_pos += target_dir
+		if target_pos < 0 or target_pos >= track_length:
+			target_pos = clampi(target_pos, 0, track_length - 1)
+			target_dir = -target_dir
+			note += " The firefly bounces off the wall!"
 	if absi(target_pos - player_pos) == 1:
-		# Adjacent: it darts one cell away — unless a wall is there.
+		# Adjacent — whether you stepped next to it or it drifted next to
+		# you this tick: it darts one cell away, unless a wall is there.
 		# Even when pinned we update its heading, so the map shows it
 		# straining against the wall.
 		target_dir = signi(target_pos - player_pos)
@@ -199,14 +213,6 @@ func _take_turn(direction: int) -> void:
 		else:
 			target_pos = dodge_cell
 			note += " It darts away!"
-	else:
-		# Free: drift one cell in its current direction, bouncing off the
-		# walls — it spends a tick sitting on the wall when it hits.
-		target_pos += target_dir
-		if target_pos < 0 or target_pos >= track_length:
-			target_pos = clampi(target_pos, 0, track_length - 1)
-			target_dir = -target_dir
-			note += " The firefly bounces off the wall!"
 
 	if turns_used >= max_turns:
 		_lose_round()
