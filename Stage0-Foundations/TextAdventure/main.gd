@@ -1,15 +1,19 @@
 extends SceneTree
 
-## Dungeon Corridor — Stage 0 deliverable.
-## A 1D turn-based adventure that exercises the whole game loop:
-## input -> update -> render, plus 1D coordinates and game states.
+## Dungeon Corridor — Stage 0 deliverable, improved edition.
+## A 1D turn-based adventure exercising the game loop, 1D coordinates,
+## and game states — now with chasing monsters, potions, an enum state
+## machine, and depth progression (Exercises D1–D5 implemented).
 ##
-## Each delve generates a RANDOM but always completable corridor:
-## - player spawns in the middle third
-## - the exit is a random end; the far end is a gold "vault"
-## - 1-2 monsters block paths (one always guards the exit route)
+## Each delve generates a RANDOM corridor:
+## - you spawn in the middle third; the exit is a random end
+## - a gate goblin guards the exit route; deeper delves add hunters
 ## - the sword always spawns where you can reach it without crossing
-##   a living monster — that's what makes every map winnable.
+##   a living goblin — but goblins CHASE you now, so move fast
+## - potions heal, gold piles wait at the vault end
+##
+## Escaping descends you one depth: longer corridor, more goblins.
+## Dying or fleeing sends you back to depth 1.
 ##
 ## Run from a terminal inside this folder:
 ##     godot --headless --script main.gd      (or double-click run.bat)
@@ -18,34 +22,45 @@ extends SceneTree
 
 const MIN_CORRIDOR := 10
 const MAX_CORRIDOR := 16
+const CORRIDOR_GROWTH := 4       # extra cells per depth below 1
+const MAX_CORRIDOR_SIZE := 28    # cap so the map still fits one line
+const MAX_HUNTERS := 3           # extra goblins beyond the gate guard
 const START_HEALTH := 20
 const SWORD_FIGHT_DAMAGE := 2
 const BARE_HANDS_DAMAGE := 8
+const MONSTER_CLAW_DAMAGE := 3
+const POTION_HEAL := 10
 const GOLD_PER_PILE := 100
 const VAULT_MONSTER_CHANCE := 0.5
-const ESC := "\u001b"          # ANSI escape character
+const MONSTER_MIN_SPAWN := 2     # goblins never spawn next to you
+const ESC := "\u001b"            # ANSI escape character
+
+enum State { PLAYING, WON, LOST, QUIT }
 
 # --- Map layout (regenerated every delve) ---
 var corridor_size := 10
 var exit_pos := 9
-var vault_pos := 0             # end opposite the exit — bonus treasure
+var vault_pos := 0               # end opposite the exit — bonus treasure
 var sword_pos := 3
-var monsters: Array = []       # positions of living goblins
+var monsters: Array = []         # positions of living goblins
 var gold_positions: Array = []
+var potions: Array = []
 
 # --- Game state (the "what" of the game at this moment) ---
+var state := State.PLAYING
 var player_pos := 0
 var health := START_HEALTH
 var gold := 0
 var has_sword := false
-var game_running := true       # current round is active
-var won := false
 var turns := 0
-var delves := 0                # corridors attempted this session
+var depth := 1                   # current corridor depth — grows on escape
+var best_depth := 0              # deepest depth reached this session
+var total_gold := 0              # banked across delves
+var delves := 0
 var escapes := 0
 var last_message := ""
-var last_tone := "info"        # info | hint | warn | bad | good
-var _input_lines: Array = []   # queued lines when stdin delivers a chunk
+var last_tone := "info"          # info | hint | warn | bad | good
+var _input_lines: Array = []     # queued lines when stdin delivers a chunk
 
 # --- UI toggles (auto-disabled when output isn't a real console) ---
 var use_color := true
@@ -68,7 +83,7 @@ func _init() -> void:
 	while play_again:
 		_start_round()
 		_render()
-		while game_running:
+		while state == State.PLAYING:
 			var command := _read_input()    # 1. INPUT
 			_update(command)                # 2. UPDATE
 			_render()                       # 3. RENDER
@@ -95,7 +110,11 @@ func _detect_terminal() -> void:
 # --- Map generation --------------------------------------------------------
 
 func _generate_map() -> void:
-	corridor_size = randi_range(MIN_CORRIDOR, MAX_CORRIDOR)
+	# Depth scaling: each escape makes the next corridor longer and
+	# adds a hunter (capped) — the reward for winning is a worse one.
+	corridor_size = mini(
+		randi_range(MIN_CORRIDOR, MAX_CORRIDOR) + (depth - 1) * CORRIDOR_GROWTH,
+		MAX_CORRIDOR_SIZE)
 	# Exit at a random end; the other end is the gold vault.
 	exit_pos = 0 if randi() % 2 == 0 else corridor_size - 1
 	vault_pos = corridor_size - 1 - exit_pos
@@ -103,19 +122,25 @@ func _generate_map() -> void:
 	player_pos = randi_range(corridor_size / 3, corridor_size * 2 / 3)
 
 	monsters.clear()
-	# GATE monster: always on the route to the exit, never adjacent to spawn.
+	# GATE goblin: always on the route to the exit, never adjacent to spawn.
 	var exit_dir := signi(exit_pos - player_pos)
 	var exit_dist := absi(exit_pos - player_pos)
-	# offset 2..exit_dist — may sit ON the exit cell itself.
-	monsters.append(player_pos + exit_dir * randi_range(2, exit_dist))
-	# VAULT monster: 50% chance, guards the treasure on the far side.
+	monsters.append(player_pos + exit_dir * randi_range(MONSTER_MIN_SPAWN, exit_dist))
+	# VAULT goblin: 50% chance, guards the treasure on the far side.
 	var vault_dist := absi(vault_pos - player_pos)
 	if randf() < VAULT_MONSTER_CHANCE and vault_dist >= 3:
-		monsters.append(player_pos - exit_dir * randi_range(2, vault_dist))
+		monsters.append(player_pos - exit_dir * randi_range(MONSTER_MIN_SPAWN, vault_dist))
+	# HUNTERS: one extra per depth — they spawn already smelling you.
+	for i in mini(depth - 1, MAX_HUNTERS):
+		var lair := _random_lair_cell()
+		if lair != -1:
+			monsters.append(lair)
 
 	# COMPLETENESS RULE: the sword must be reachable without crossing a
 	# living monster. Walk both directions from spawn and stop at the
-	# first monster each way — any cell in that zone is fair game.
+	# first goblin each way — any cell in that zone is fair game.
+	# (Chasers can still cut you off afterwards — the guarantee is that
+	# the sword is reachable NOW, not that it stays safe.)
 	var reachable := _reachable_cells()
 	reachable.erase(vault_pos)   # keep the vault free for its gold pile
 	sword_pos = reachable[randi_range(0, reachable.size() - 1)]
@@ -131,11 +156,30 @@ func _generate_map() -> void:
 		if not free.is_empty():
 			gold_positions.append(free[randi_range(0, free.size() - 1)])
 
+	# Potions: one per delve, plus more on deeper runs — you'll need them.
+	potions.clear()
+	for i in clampi(depth, 1, 3):
+		var free := _free_cells()
+		if not free.is_empty():
+			potions.append(free[randi_range(0, free.size() - 1)])
+
+
+func _random_lair_cell() -> int:
+	# Hunter spawn: any cell far enough from the player and not already
+	# holding a goblin. Exit/vault cells are fair game — it won't stay.
+	var cells: Array = []
+	for i in corridor_size:
+		if absi(i - player_pos) >= MONSTER_MIN_SPAWN and not monsters.has(i):
+			cells.append(i)
+	if cells.is_empty():
+		return -1
+	return cells[randi_range(0, cells.size() - 1)]
+
 
 func _reachable_cells() -> Array:
 	# Cells the player can walk to without fighting — stops at the first
 	# living monster in each direction. Guaranteed non-empty because the
-	# nearest monster is always >= 2 cells from spawn.
+	# nearest monster is always >= MONSTER_MIN_SPAWN cells from spawn.
 	var cells: Array = []
 	var i := player_pos - 1
 	while i >= 0 and not monsters.has(i):
@@ -152,7 +196,8 @@ func _free_cells() -> Array:
 	var cells: Array = []
 	for i in corridor_size:
 		if i != player_pos and i != exit_pos and i != sword_pos \
-				and not monsters.has(i) and not gold_positions.has(i):
+				and not monsters.has(i) and not gold_positions.has(i) \
+				and not potions.has(i):
 			cells.append(i)
 	return cells
 
@@ -171,7 +216,9 @@ func _read_input() -> String:
 			return ""
 		# A single read may contain several lines when stdin is piped —
 		# split them so queued input isn't swallowed in one command.
-		_input_lines = chunk.split("\n")
+		# Drop one trailing line ending first, or its empty tail becomes
+		# a phantom wait turn.
+		_input_lines = chunk.trim_suffix("\n").trim_suffix("\r").split("\n")
 	var line: String = _input_lines.pop_front()
 	return line.strip_edges().to_lower()
 
@@ -179,30 +226,66 @@ func _read_input() -> String:
 # --- UPDATE (game logic) ---------------------------------------------------
 
 func _update(command: String) -> void:
+	# Only actions that pass time tick the world — looking, checking the
+	# map and asking for help are free. With goblins on your trail, that
+	# distinction is the difference between scouting and being eaten.
 	match command:
 		"left", "l":
 			_try_move(-1)
+			_world_tick()
 		"right", "r":
 			_try_move(1)
+			_world_tick()
+		"wait", "w", "":
+			_say("You hold your ground, listening.")
+			_world_tick()
 		"attack", "a":
 			_attack()
+			_world_tick()
 		"look":
 			_describe_cell()
+		"map":
+			_say("P=you  s=sword  g=gold  p=potion  M=goblin  E=exit  .=empty")
 		"status":
-			_say("HP %d/%d | Gold %d | Sword: %s | Goblins: %d | Position %d/%d" % [
+			_say("HP %d/%d | Gold %d | Sword: %s | Goblins: %d | Position %d/%d | Depth %d" % [
 				health, START_HEALTH, gold, "yes" if has_sword else "no",
-				monsters.size(), player_pos, corridor_size - 1])
+				monsters.size(), player_pos, corridor_size - 1, depth])
 		"help", "h", "?":
 			_print_help()
 		"quit", "q":
-			game_running = false
+			state = State.QUIT
 			_say("You flee back up the stairs.")
-		"":
-			pass
 		_:
 			_say("Unknown command. Type 'help' for options.", "warn")
+
+
+func _world_tick() -> void:
+	# One tick of the game world — the goblins always get their move.
 	turns += 1
+	if state != State.PLAYING:
+		return    # you escaped/died this action — no last swipe
+	_chase_monsters()
 	_check_end()
+
+
+func _chase_monsters() -> void:
+	# Every goblin shambles one cell toward you. If it's already adjacent
+	# it claws instead of moving — the corridor gives no room to pass.
+	var claws := 0
+	for i in range(monsters.size()):
+		var step: int = monsters[i] + signi(player_pos - monsters[i])
+		if step == player_pos:
+			claws += 1
+		elif not monsters.has(step):
+			monsters[i] = step
+		# else: blocked by another goblin — it snarls and shuffles in place
+	if claws > 0:
+		health -= MONSTER_CLAW_DAMAGE * claws
+		var claw_msg := "A goblin claws you! (-%d HP)" % (MONSTER_CLAW_DAMAGE * claws)
+		if claws > 1:
+			claw_msg = "%d goblins claw you! (-%d HP)" % [
+				claws, MONSTER_CLAW_DAMAGE * claws]
+		_say(last_message + " " + claw_msg, "bad")
 
 
 func _try_move(direction: int) -> void:
@@ -225,9 +308,12 @@ func _resolve_cell() -> void:
 		gold_positions.erase(player_pos)
 		gold += GOLD_PER_PILE
 		_say("A pouch of gold! +%d gold." % GOLD_PER_PILE, "good")
+	elif potions.has(player_pos):
+		potions.erase(player_pos)
+		health = mini(health + POTION_HEAL, START_HEALTH)
+		_say("A corked potion — you drink it down. +%d HP." % POTION_HEAL, "good")
 	elif player_pos == exit_pos:
-		won = true
-		game_running = false
+		state = State.WON
 		_say("You push open a heavy door — daylight!", "good")
 	else:
 		_say("You creep through the dark corridor.")
@@ -260,13 +346,15 @@ func _describe_cell() -> void:
 	if player_pos == exit_pos:
 		_say("A door stands here.")
 	elif nearest != -1 and distance == 1:
-		_say("You hear snarling one cell away. 'attack' or turn back?", "warn")
+		_say("Snarling one cell away — 'attack' or keep moving!", "warn")
 	elif nearest != -1 and distance <= 3:
-		_say("Something growls in the darkness.", "hint")
+		_say("Footsteps shuffle closer through the dark.", "hint")
 	elif player_pos == sword_pos and not has_sword:
 		_say("Something metal glints on the floor.", "hint")
 	elif gold_positions.has(player_pos):
 		_say("A leather pouch sits in a niche.", "hint")
+	elif potions.has(player_pos):
+		_say("A corked vial glints in the gloom.", "hint")
 	elif player_pos == vault_pos:
 		_say("This is the deepest end of the corridor.")
 	else:
@@ -284,8 +372,7 @@ func _nearest_monster() -> int:
 func _check_end() -> void:
 	if health <= 0:
 		health = 0
-		won = false
-		game_running = false
+		state = State.LOST
 		_say("Your legs give out. The corridor goes dark...", "bad")
 
 
@@ -294,12 +381,12 @@ func _start_round() -> void:
 	health = START_HEALTH
 	gold = 0
 	has_sword = false
-	game_running = true
-	won = false
 	turns = 0
+	state = State.PLAYING
 	delves += 1
-	_say("You descend into a %d-cell corridor. The door is to the %s — the far end smells of gold."
-		% [corridor_size, "left" if exit_pos == 0 else "right"])
+	best_depth = maxi(best_depth, depth)
+	_say("Depth %d — a %d-cell corridor. The door is to the %s — and the goblins can smell you."
+		% [depth, corridor_size, "left" if exit_pos == 0 else "right"])
 
 
 func _ask_play_again() -> bool:
@@ -339,16 +426,19 @@ func _print_hud() -> void:
 			cells.append(_c("s", "33"))
 		elif gold_positions.has(i):
 			cells.append(_c("g", "33"))
+		elif potions.has(i):
+			cells.append(_c("p", "1;35"))
 		else:
 			cells.append(_c(".", "90"))
 	print(_c("=== DUNGEON CORRIDOR ===", "1;36"))
 	print("[%s]" % " ".join(cells))
 	var hp_code := "1;31" if health <= 5 else "32"
-	print("%s   %s   %s" % [
+	print("%s   %s   %s   %s" % [
 		_c("HP:%d" % health, hp_code),
 		_c("Gold:%d" % gold, "33"),
+		_c("Depth:%d" % depth, "1;35"),
 		_c("Turn:%d" % turns, "90")])
-	print(_c("P=you s=sword g=gold M=monster E=exit", "90"))
+	print(_c("P=you s=sword g=gold p=potion M=goblin E=exit", "90"))
 	print(_c("-".repeat(44), "90"))
 
 
@@ -383,30 +473,37 @@ func _clear_screen() -> void:
 
 func _print_intro() -> void:
 	print("=== DUNGEON CORRIDOR ===")
-	print("Each delve is a different random corridor — you spawn mid-way.")
-	print("The door (E) is at one end, gold waits at the other. Find the")
-	print("sword (s) before you cross any monster (M). 'help' for commands.")
+	print("Each delve is a different corridor — you spawn mid-way, the door")
+	print("is at one end, gold at the other. Find the sword (s) before you")
+	print("cross a goblin (M) — they CHASE you now. 'help' for commands.")
 
 
 func _print_round_result() -> void:
 	print("")
-	if won:
-		escapes += 1
-		print(_c("=== YOU ESCAPED in %d turns with %d gold! ===" % [turns, gold], "1;32"))
-	elif health <= 0:
-		print(_c("=== GAME OVER — the corridor claims another soul. ===", "1;31"))
-	else:
-		print("=== You abandoned the delve after %d turns. ===" % turns)
+	match state:
+		State.WON:
+			escapes += 1
+			total_gold += gold
+			depth += 1
+			print(_c("=== YOU ESCAPED in %d turns with %d gold — stairs spiral down to depth %d ==="
+				% [turns, gold, depth], "1;32"))
+		State.LOST:
+			depth = 1
+			print(_c("=== GAME OVER — the corridor claims another soul. ===", "1;31"))
+		State.QUIT:
+			depth = 1
+			print("=== You abandoned the delve after %d turns. ===" % turns)
 
 
 func _print_outro() -> void:
 	print("")
 	if delves > 0:
-		print(_c("=== Session: %d/%d delves escaped ===" % [escapes, delves], "1;36"))
+		print(_c("=== Session: %d/%d delves escaped | Deepest: %d | Gold banked: %d ==="
+			% [escapes, delves, best_depth, total_gold], "1;36"))
 
 
 func _print_help() -> void:
 	# Route through _say() so the text survives the next _render()'s
 	# screen clear — direct print() output would be wiped instantly.
-	_say("Commands: left/l, right/r, attack/a, look, status, quit/q\n"
-		+ "Map: P=you  s=sword  g=gold  M=monster  E=exit  .=empty")
+	_say("Commands: left/l, right/r, wait/w, attack/a, look, map, status, quit/q\n"
+		+ "Only moving, waiting and attacking pass time — goblins chase each tick.")
