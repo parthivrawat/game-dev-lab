@@ -15,9 +15,9 @@ you spawn in the **middle**, not at an end:
 - Potions `p` heal 10 HP (one per delve, more deeper down)
 
 Every map is **completable by construction** — you can always reach the sword
-first, then every goblin is killable (2 HP each vs your 20 HP). But there's a
-catch: **goblins chase you**, one cell per tick, and claw you when adjacent.
-Bait them off their posts, or fight through.
+first, then every goblin goes down in one sword hit at a cost of 2 HP each
+(you have 20). But there's a catch: **goblins chase you**, one cell per tick,
+and claw you when adjacent. Bait them off their posts, or fight through.
 
 **Escape and you descend**: each successful delve takes you one depth deeper —
 longer corridor, more goblins, more potions. Dying or fleeing sends you back

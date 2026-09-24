@@ -276,9 +276,9 @@ func _chase_monsters() -> void:
 		var step: int = monsters[i] + signi(player_pos - monsters[i])
 		if step == player_pos:
 			claws += 1
-		elif not monsters.has(step):
+		elif not monsters.has(step) and (has_sword or step != sword_pos):
 			monsters[i] = step
-		# else: blocked by another goblin — it snarls and shuffles in place
+		# else: blocked — by another goblin, or the sword it would cover up
 	if claws > 0:
 		health -= MONSTER_CLAW_DAMAGE * claws
 		var claw_msg := "A goblin claws you! (-%d HP)" % (MONSTER_CLAW_DAMAGE * claws)
@@ -310,8 +310,9 @@ func _resolve_cell() -> void:
 		_say("A pouch of gold! +%d gold." % GOLD_PER_PILE, "good")
 	elif potions.has(player_pos):
 		potions.erase(player_pos)
-		health = mini(health + POTION_HEAL, START_HEALTH)
-		_say("A corked potion — you drink it down. +%d HP." % POTION_HEAL, "good")
+		var gain := mini(health + POTION_HEAL, START_HEALTH) - health
+		health += gain
+		_say("A corked potion — you drink it down. +%d HP." % gain, "good")
 	elif player_pos == exit_pos:
 		state = State.WON
 		_say("You push open a heavy door — daylight!", "good")
