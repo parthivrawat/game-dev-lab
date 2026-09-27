@@ -1,0 +1,15 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="1DEndlessRunner"
+config/description="Stage 1, Game 4 — 1D endless runner: jump rocks, stay under birds, and outlast a difficulty curve that speeds up and crowds in. Run headless: godot --headless --script main.gd"
+config/features=PackedStringArray("4.7")
