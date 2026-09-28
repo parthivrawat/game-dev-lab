@@ -74,10 +74,26 @@ GameDevLab/
     ├── Theory/                    # Concept explanations
     │   ├── 00-Setup-Guide.md
     │   ├── 01-What-Is-A-Game.md
-    │   └── 02-What-Is-RenPy.md
+    │   ├── 02-What-Is-RenPy.md
+    │   ├── 03-Coordinates-and-Vectors.md
+    │   ├── 04-Collision-Detection.md
+    │   ├── 05-Signals-and-Events.md
+    │   └── 06-Debugging-and-Testing.md
     ├── Assets/                    # Reusable graphics/sounds
+    │   ├── README.md              # Organization, naming, licensing
+    │   └── placeholders/          # Drop-in SVG shapes
     ├── Templates/                 # Code templates
+    │   ├── README.md              # Index & usage
+    │   ├── Game-Design-Doc-Template.md
+    │   ├── Game-README-Template.md
+    │   ├── console-game-template.gd
+    │   ├── scene-game-template.gd
+    │   ├── renpy-template.rpy
+    │   └── run.bat
     └── References/                # Documentation links
+        ├── Documentation-Links.md
+        ├── Glossary.md
+        └── Asset-Sources.md
 ```
 
 ---
@@ -195,6 +211,15 @@ GameDevLab/
 1. **00-Setup-Guide.md** - Install Godot, understand game engines
 2. **01-What-Is-A-Game.md** - Game loops, core components, fundamentals
 3. **02-What-Is-RenPy.md** - Visual novels, Ren'Py basics, engine comparison
+4. **03-Coordinates-and-Vectors.md** - 1D/2D/3D space, vectors, delta time
+5. **04-Collision-Detection.md** - Overlap tests, tunneling, physics bodies
+6. **05-Signals-and-Events.md** - Godot signals, callbacks, decoupling
+7. **06-Debugging-and-Testing.md** - Debug loop, error reading, test checklists
+
+### Resource Files
+- **Templates/** - Design doc, game README, GDScript & Ren'Py skeletons, run.bat
+- **References/** - Documentation links, full glossary, asset sources & licensing
+- **Assets/** - Shared art organization + drop-in SVG placeholders
 
 ### Future Documents (Created as needed)
 - Programming fundamentals lessons
