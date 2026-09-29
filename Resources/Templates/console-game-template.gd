@@ -31,7 +31,7 @@ var last_tone := "info"   # info | hint | warn | bad | good
 var _input_lines: Array = []   # queued lines for piped stdin
 
 
-func _init() -> void:
+func _initialize() -> void:
 	# Without a real stdin, reads return "" instantly and we'd spin forever.
 	if OS.get_stdin_type() == OS.STD_HANDLE_INVALID:
 		print("This game reads input from stdin — run it from a terminal:")

@@ -67,7 +67,7 @@ var use_color := true
 var clear_screen := true
 
 
-func _init() -> void:
+func _initialize() -> void:
 	# Guard: without a real stdin (e.g. double-clicked binary), the read
 	# below would return "" instantly and the loop would spin forever.
 	if OS.get_stdin_type() == OS.STD_HANDLE_INVALID:

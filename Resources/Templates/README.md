@@ -27,7 +27,7 @@ directly (or the next game loses its clean starting point).
 
 The same skeleton the Stage 1 games are built on:
 
-- `extends SceneTree` + `_init` game loop (`input → update → render`)
+- `extends SceneTree` + `_initialize` game loop (`input → update → render`)
 - stdin guard (won't spin when there's no terminal)
 - `settings.cfg` load/create/validate pattern
 - Piped-stdin safe input reader (queued lines, EOF → quit)

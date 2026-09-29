@@ -63,7 +63,7 @@ var career_runs := 0
 var career_meters := 0
 
 
-func _init() -> void:
+func _initialize() -> void:
 	# Without a real stdin, reads return "" instantly and we'd spin forever.
 	if OS.get_stdin_type() == OS.STD_HANDLE_INVALID:
 		print("This game reads moves from stdin — run it from a terminal:")

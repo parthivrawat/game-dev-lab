@@ -57,7 +57,7 @@ var comp_hi := 0
 var comp_guess := 0
 
 
-func _init() -> void:
+func _initialize() -> void:
 	# Without a real stdin, reads return "" instantly and we'd spin forever.
 	if OS.get_stdin_type() == OS.STD_HANDLE_INVALID:
 		print("This game reads guesses from stdin — run it from a terminal:")
