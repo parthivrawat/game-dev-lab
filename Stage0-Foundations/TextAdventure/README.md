@@ -81,7 +81,7 @@ free — scout as much as you like.
 
 | Concept | Where | What to notice |
 |---------|-------|----------------|
-| Game loop (Theory 01) | `_init` | Literal `input → update → render` in a `while` |
+| Game loop (Theory 01) | `_initialize` | Literal `input → update → render` in a `while` — the MainLoop startup callback, so `test_main.gd` can instantiate the game without launching a session |
 | Game state | Top-of-file `var`s | The whole world is ~10 variables |
 | **Enum state machine (D4)** | `State`, `_update`, `_print_round_result` | `PLAYING/WON/LOST/QUIT` — one variable replaces the old `won`/`game_running` flags, `match` on it at round end |
 | Constants (L1) | `const` block | Rules as data — damage, heals, corridor growth, caps |
@@ -136,6 +136,17 @@ The game changed — so did the exercise list:
    `settings.cfg`-style `ConfigFile` (Game01 already writes one — crib it).
 
 See `../Exercises.md` Part D for the original list and solution guidance.
+
+---
+
+## ✅ Tests
+
+`test_main.gd` exercises the mechanics automatically — run `run_tests.bat` or
+`godot --headless --script test_main.gd`. It instantiates the game without a
+session (the loop lives in `_initialize()`, the callback Godot runs at startup,
+rather than the `_init` constructor), then drives `_update`, `_try_move` and
+friends directly — the automated version of the manual checklist habit from
+`../../Resources/Theory/06-Debugging-and-Testing.md`.
 
 ---
 
