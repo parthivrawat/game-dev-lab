@@ -116,7 +116,7 @@ nothing.
 
 | Concept | Where | What to notice |
 |---------|-------|----------------|
-| Game loop | `_init` | Same `input → update → render` skeleton as Stage 0 — it really is *the* pattern |
+| Game loop | `_initialize` | Same `input → update → render` skeleton as Stage 0 — it really is *the* pattern. (`_initialize` is the MainLoop callback Godot runs at startup — keeping the loop out of the `_init` constructor is what lets `test_main.gd` create game objects without starting a session) |
 | `enum` state machine | `State`, `_update` | `match state:` dispatches to a per-state handler — and PLAYING now dispatches *again* on `mode`. Two axes of state, still readable |
 | Config files | `_load_config` → `ConfigFile` | `get_value(section, key, default)` per key — presets are just a section whose keys get read into a Dictionary |
 | **Dictionaries** | `presets`, `best_scores` | First look at `{key: value}` — a difficulty table and a score table, both read/written as data |
@@ -130,7 +130,7 @@ nothing.
 ### The game loop, annotated
 
 ```
-_init:
+_initialize:
     load config → apply CLI overrides → intro → start round
     while game_running:          # session loop
         _read_input()            # INPUT    — "what did the player type?"
@@ -171,6 +171,10 @@ All five ideas from the original list are in:
 ---
 
 ## ✅ Test Checklist
+
+**Automated**: `test_main.gd` covers the mechanics below — run `run_tests.bat`
+or `godot --headless --script test_main.gd`. It instantiates the game without
+a session, which is why the loop lives in `_initialize()`, not `_init()`.
 
 Verify each of these by actually playing:
 
