@@ -108,7 +108,7 @@ your move succeeds. Only invalid input (typos, unknown commands) is free.
 
 | Concept | Where | What to notice |
 |---------|-------|----------------|
-| Game loop | `_init` | Same `input → update → render` skeleton as Game 1 — three games in, it's always this shape |
+| Game loop | `_initialize` | Same `input → update → render` skeleton as Game 1 — three games in, it's always this shape |
 | Position | `player_pos`, `target_pos` | The entire world is two integers on a number line |
 | Direction / proto-velocity | `target_dir` | `+1`/`-1` is a 1D velocity — `pos += dir` per tick is exactly what `_process(delta)` will do in Game 3 |
 | Boundaries (reject) | `_take_turn` | Player move is bounds-checked *before* applying — invalid move = stay put |
@@ -143,6 +143,10 @@ whole game.
 ---
 
 ## ✅ Test Checklist
+
+**Automated**: `test_main.gd` covers the mechanics below — run `run_tests.bat`
+or `godot --headless --script test_main.gd`. It instantiates the game without
+a session, which is why the loop lives in `_initialize()`, not `_init()`.
 
 Verify each of these by actually playing:
 
