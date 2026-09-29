@@ -168,6 +168,10 @@ physics second, judgement last.
 
 ## ✅ Test Checklist
 
+**Automated**: `test_main.gd` covers the mechanics below — run `run_tests.bat`
+or `godot --headless --script test_main.gd`. It instantiates the game without
+a session, which is why the loop lives in `_initialize()`, not `_init()`.
+
 Verify each of these by actually playing:
 
 - [ ] `j` makes you airborne for exactly `jump_ticks` ticks; Enter/`w` runs one tick
