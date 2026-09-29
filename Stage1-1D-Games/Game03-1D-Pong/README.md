@@ -216,6 +216,10 @@ past the goal line.
 
 ## ✅ Test Checklist
 
+**Automated**: `test_main.gd` covers the mechanics below — run `run_tests.bat`
+or `godot --headless --script test_main.gd`. It instantiates the game without
+a session, which is why the loop lives in `_initialize()`, not `_init()`.
+
 Verify each of these by actually playing:
 
 - [ ] `l`/`r`/`a`/`d` move you one cell inside your half; mid-court blocks you
