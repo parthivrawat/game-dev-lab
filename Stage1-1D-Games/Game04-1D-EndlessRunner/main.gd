@@ -80,7 +80,7 @@ var career_ghost := ""      # the best run's move log — your shadow to beat
 var ghost_m := 0            # distance the stored ghost reached
 
 
-func _init() -> void:
+func _initialize() -> void:
 	# Without a real stdin, reads return "" instantly and we'd spin forever.
 	if OS.get_stdin_type() == OS.STD_HANDLE_INVALID:
 		print("This game reads moves from stdin — run it from a terminal:")
@@ -298,7 +298,7 @@ func _update_run_over(input: String) -> void:
 			_say("Please answer 'y' or 'n'.", "warn")
 
 
-func _take_turn(want_jump: bool, hop: bool) -> void:
+func _take_turn(want_jump: bool, hop := false) -> void:
 	# Every input is one tick of road: your feet, the world's scroll,
 	# the spawner, the adjudication — in that order, every time.
 	var parts := PackedStringArray()
