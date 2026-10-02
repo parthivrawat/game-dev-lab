@@ -97,7 +97,10 @@ label ending_good:
     ## show eileen happy
     e "You got the key AND you were nice about it."
     e "Best ending unlocked!"
-    
+
+    ## A `label` does NOT stop execution — without `return` (or `jump`)
+    ## the script falls through into the next label and every ending
+    ## would play in sequence.
 
 
 label ending_neutral:

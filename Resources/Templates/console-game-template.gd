@@ -133,14 +133,16 @@ func _update_playing(input: String) -> void:
 		"help", "h", "?":
 			_print_help()
 		# --- replace with your game's commands ---
-		"score":
-			_say("Score: %d, turn %d/%d." % [score, turns, max_turns])
-		_:
+		"act":
 			turns += 1
 			score += 1
 			_say("You did a thing. +1 point!")
 			if turns >= max_turns:
 				_end_game()
+		"score":
+			_say("Score: %d, turn %d/%d." % [score, turns, max_turns])
+		_:
+			_say("Unknown command. Type 'help' for options.", "warn")
 
 
 func _start_game() -> void:
@@ -195,10 +197,10 @@ func _clear_screen() -> void:
 
 
 func _print_help() -> void:
-	print("\nCommands:")
-	print("  score      — show score and turns")
-	print("  help       — this list")
-	print("  quit       — leave the game")
+	# Route through _say() — a direct print() is wiped by the next
+	# _render()'s screen clear when clear_screen is enabled.
+	_say("Commands: act, score, help, quit\n"
+		+ "act is the demo verb — replace it with your game's actions.", "hint")
 
 
 func _print_outro() -> void:
