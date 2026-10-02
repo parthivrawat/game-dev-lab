@@ -93,6 +93,16 @@ Imagine building a house:
 3. Double-click to run (no installation needed!)
 4. *Optional*: Create a desktop shortcut
 
+> **Important for this lab**: the Windows download contains **two**
+> executables — `Godot_v4.x.x_win64.exe` and
+> `Godot_v4.x.x_win64_console.exe`. The **console** build is required for
+> the Stage 0–1 text games (`godot --headless --script main.gd`), because
+> the regular exe detaches from the console and can't read typed input.
+> Keep both. Each game's `run.bat` looks for the console exe — either
+> edit its `GODOT` variable once, or set a `GODOT` **environment
+> variable** pointing at your console exe and every `run.bat` will pick
+> it up automatically.
+
 **macOS**:
 1. Extract the ZIP file
 2. Move `Godot.app` to your Applications folder
