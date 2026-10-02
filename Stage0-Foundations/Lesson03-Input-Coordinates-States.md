@@ -165,17 +165,19 @@ if state == State.PLAYING:
     update_game()
 ```
 
-### TextAdventure's simpler version
+### TextAdventure's version
 
-The deliverable uses two booleans instead of a full enum:
+The deliverable uses exactly this pattern — its states are
+`enum State { PLAYING, WON, LOST, QUIT }`, `_update` dispatches on
+commands, and `_print_round_result` `match`es on the state at round end.
 
-```gdscript
-var game_running := true
-var won := false
-```
+Two details worth noticing when you read `main.gd`:
 
-That's fine for two states — but notice how quickly it would get ugly with a
-third (a pause? a second phase?). Stage 1's games graduate to the enum version.
+- `"quit"` sets `State.QUIT` but does **not** tick the world — leaving
+  the dungeon shouldn't let the goblins take a free swipe.
+- The "play again?" prompt lives *outside* the state machine in
+  `_ask_play_again()` — session flow ("another delve?") isn't game
+  state. Knowing where the boundary goes is part of the design skill.
 
 ---
 
@@ -229,4 +231,4 @@ third (a pause? a second phase?). Stage 1's games graduate to the enum version.
 ## 🏆 You're Ready for the Deliverable
 
 Open `TextAdventure/README.md`, run the game, and find all three lessons
-living inside ~150 lines of code. Then try the exercises in `Exercises.md`.
+living inside ~510 lines of code. Then try the exercises in `Exercises.md`.

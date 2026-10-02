@@ -34,8 +34,11 @@ Stage0-Foundations/
 ├── Lesson03-Input-Coordinates-States.md
 ├── Exercises.md                           ← Practice problems + solutions
 └── TextAdventure/                         ← Stage 0 deliverable
-    ├── README.md                          ← How to run it
+    ├── README.md                          ← How to run + modification ideas
     ├── main.gd                            ← A complete 1D text adventure
+    ├── test_main.gd                       ← Automated tests
+    ├── run.bat                            ← Double-click runner
+    ├── run_tests.bat                      ← Double-click test runner
     └── project.godot
 ```
 
@@ -49,11 +52,11 @@ Stage0-Foundations/
 | Concept | How the game uses it |
 |---------|---------------------|
 | Game loop | `input → update → render` once per turn |
-| Variables & types | Position, health, gold, flags |
+| Variables & types | Position, health, gold, entity arrays |
 | Functions | One function per responsibility (`_update`, `_render`, ...) |
 | Conditions | Command parsing, combat, pickups |
 | 1D coordinates | The whole game is a corridor on a number line |
-| Game states | Playing / won / lost |
+| Game states | `enum State` — playing / won / lost / quit |
 
 **Read the code, run it, then modify it.** Suggested modifications are listed in
 `TextAdventure/README.md` — breaking and fixing things is the fastest way to
@@ -71,7 +74,8 @@ You're done with Stage 0 when you can:
 - [ ] Explain what a 1D position, direction, and distance are
 - [ ] Describe game states and sketch a state diagram
 - [ ] Run `TextAdventure/main.gd` and win the game
-- [ ] Modify the game (e.g., add a second monster or a new command)
+- [ ] Run `TextAdventure/run_tests.bat` and see every test pass
+- [ ] Modify the game (e.g., a new command — see the README's idea list)
 - [ ] Complete the exercises in `Exercises.md`
 
 When all boxes are ticked, update `PROGRESS.md` and move on to

@@ -90,8 +90,16 @@ functions** at specific moments. You write the function, Godot decides *when*.
 
 ```gdscript
 func _init() -> void:
-    # Constructor — runs when the object is created.
-    # For -s/--script SceneTree scripts, this is effectively "main()".
+    # Constructor — runs when the object is created, on ANY
+    # instantiation — including `MyScript.new()` inside a test.
+    pass
+
+func _initialize() -> void:
+    # SceneTree main loops only — runs once at startup when the script
+    # is launched with `godot --headless --script`. This is "main()" for
+    # the console games in Stages 0-1. The loop lives here rather than
+    # _init precisely because _init also fires when a test instantiates
+    # the game object.
     pass
 
 func _ready() -> void:
@@ -133,13 +141,18 @@ a habit worth building from day one, even though Stage 0/1 games barely need it.
 Look at the TextAdventure deliverable — its whole structure is functions:
 
 ```gdscript
-func _init() -> void:
+func _initialize() -> void:
     _print_intro()
-    _render()
-    while game_running:
-        var command := _read_input()     # INPUT
-        _update(command)                 # UPDATE
-        _render()                        # RENDER
+    var play_again := true
+    while play_again:
+        _start_round()
+        _render()
+        while state == State.PLAYING:
+            var command := _read_input()     # INPUT
+            _update(command)                 # UPDATE
+            _render()                        # RENDER
+        _print_round_result()
+        play_again = _ask_play_again()
     _print_outro()
     quit()
 ```
@@ -209,6 +222,7 @@ Each function does one thing:
 - [ ] I can write typed functions with defaults and return values
 - [ ] I know the difference between member and local variables
 - [ ] I can name the callbacks Godot provides and when each runs
+- [ ] I know why console games start in `_initialize()`, not `_init()`
 - [ ] I understand what `delta` is and why it matters
 - [ ] I know how the game loop maps to function calls
 

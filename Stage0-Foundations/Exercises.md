@@ -234,21 +234,33 @@ func _parse_command(input: String) -> String:
 
 ---
 
-## Part D: Modify the Deliverable (hands-on)
+## Part D: Study the Deliverable's Improvements (hands-on)
 
-These have no single right answer — do them in `TextAdventure/main.gd`:
+`TextAdventure/main.gd` is the *improved* edition — everything below is
+already implemented. Don't just read the answers: find each feature in
+the code, then run `run_tests.bat` to watch the automated checks prove
+it works. Reimplementing one on a copy of the file is excellent practice.
 
-- [ ] **D1 (easy)**: Add a `"potion"` cell that heals 10 HP when picked up —
-  add it to the generator (and to `_free_cells` so it never overlaps).
-- [ ] **D2 (easy)**: Add a `"map"` command that re-renders the corridor
-  (useful when output scrolls).
-- [ ] **D3 (medium)**: Make the monsters chase the player — after each turn,
-  each one moves one cell toward the player. Now the game has stakes! (And
-  think: does the reachable-sword rule still guarantee completable maps?)
-- [ ] **D4 (medium)**: Replace `won`/`game_running` with an
-  `enum State { PLAYING, WON, LOST, QUIT }` and a `match` in the outro.
-- [ ] **D5 (harder)**: Add a second corridor level — after winning, the player
-  descends to a longer corridor with two monsters.
+- **D1 (potions)** — `p` cells heal 10 HP when picked up.
+  → `_resolve_cell`, `_free_cells`, `_generate_map`, `_print_hud`
+- **D2 (map command)** — `map` reprints the cell legend, free of charge.
+  → `_update`
+- **D3 (chasing monsters)** — every action tick, each goblin steps one
+  cell toward you and claws when adjacent.
+  → `_chase_monsters`, `_world_tick`. *Does the reachable-sword rule
+  still guarantee completable maps?* — it guarantees the sword is
+  reachable **at spawn**; chasers can intercept you on the way, so grab
+  it early.
+- **D4 (enum state machine)** — `enum State { PLAYING, WON, LOST, QUIT }`
+  replaced the `won`/`game_running` flags.
+  → `_update`, `_world_tick`, `_print_round_result`
+- **D5 (depth progression)** — escaping descends to a longer corridor
+  with extra hunters; dying or fleeing resets to depth 1.
+  → `depth`, `_generate_map`, `_print_round_result`
 
-After D3–D5, update `PROGRESS.md` — that's genuine game logic you wrote
-yourself. Then it's on to **Stage 1, Game 1: Number Guessing**.
+**Fresh modifications** live in `TextAdventure/README.md` → *New
+Modification Ideas* (guard goblins, torch light, goblin HP, fleeing
+potions, a high-score file) — those are the open exercises now.
+
+After building one yourself, update `PROGRESS.md` — that's genuine game
+logic you wrote. Then it's on to **Stage 1, Game 1: Number Guessing**.
