@@ -73,7 +73,7 @@
 - `Area2D` - Detects overlaps
 - `CollisionShape2D` - Defines collision area
 - `Camera2D` - 2D camera
-- `TileMap` - Grid-based level design
+- `TileMapLayer` - Grid-based level design (called `TileMap` before Godot 4.3)
 
 **3D Nodes**:
 - `Node3D` - Basic 3D node
@@ -469,7 +469,7 @@ menu:
         jump forest_scene
     "Castle":
         jump castle_scene
-    "Stay here." (if has_map):
+    "Stay here." if has_map:
         "You decide to wait."
 ```
 

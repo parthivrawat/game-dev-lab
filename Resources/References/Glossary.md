@@ -73,6 +73,19 @@ topic — scan before asking "what does X mean again?"
 | **`@onready`** | Assign when `_ready` runs (node refs exist by then) |
 | **`res://`** | Path root = your project folder |
 | **`extends SceneTree`** | Whole-game script (console/headless games) |
+| **`_initialize()`** | SceneTree callback run once at startup — "main()" for `--script` games |
+
+## 🖥️ Terminal & Console
+
+| Term | Definition |
+|------|------------|
+| **stdin / stdout** | A terminal's text input / output streams |
+| **Headless** | Running Godot with no window (`--headless`) |
+| **Console exe** | The `*_console.exe` Godot build that keeps stdin attached |
+| **ANSI escape code** | In-text codes for color/cursor (e.g. `[31m` = red) |
+| **EOF** | End-of-input on a stream — piped input ran out |
+| **`ConfigFile`** | Godot's INI-style settings file helper (`settings.cfg`) |
+| **Seed** | Starting value for a random sequence — same seed, same rolls |
 
 ## 📖 Ren'Py
 
