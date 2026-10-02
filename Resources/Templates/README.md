@@ -11,7 +11,9 @@ directly (or the next game loses its clean starting point).
 | `console-game-template.gd` | `main.gd` | Turn-based terminal games — Stage 0–1 (`extends SceneTree`) |
 | `scene-game-template.gd` | `main.gd` | Real-time scene games — Stage 2+ (`extends Node2D`) |
 | `renpy-template.rpy` | `game/script.rpy` | Ren'Py visual novels — the VN track |
+| `test-main-template.gd` | `test_main.gd` | Automated checks for console games — pairs with `run_tests.bat` |
 | `run.bat` | `run.bat` | Any console game — edit the `GODOT` path once |
+| `run_tests.bat` | `run_tests.bat` | Any console game with a `test_main.gd` |
 
 ---
 
@@ -33,6 +35,17 @@ The same skeleton the Stage 1 games are built on:
 - Piped-stdin safe input reader (queued lines, EOF → quit)
 - ANSI color tones that auto-disable when piped (`NO_COLOR` honored)
 - `enum State` + `match` dispatch — extend it like Game 3 did
+- All output routes through `_say()` so it survives the screen clear
+
+### Test harness (`test-main-template.gd`)
+
+The same micro-framework every Stage 1 game's `test_main.gd` uses:
+
+- Discovers and runs every `test_*` method alphabetically
+- `expect` / `expect_eq` / `expect_near` assertions with labeled failures
+- Instantiates the game *without* starting a session (that's why the
+  loop lives in `_initialize`, not `_init`), so tests poke the logic
+  functions directly — the automated version of the README checklist
 
 ### Scene template (`scene-game-template.gd`)
 
